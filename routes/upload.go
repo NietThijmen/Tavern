@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strings"
 	"time"
 )
 
@@ -54,10 +55,14 @@ type DiscordResponse struct {
 
 var domain = "http://" + config.ReadEnv("DOMAIN") + "/"
 
+func slugify(s string) string {
+	return strings.ToLower(strings.ReplaceAll(s, " ", "-"))
+}
+
 func Upload(writer http.ResponseWriter, request *http.Request) {
 	startTime := time.Now()
 
-	var filePaths = make(map[string]string)
+	var uploadedFiles []Attachment
 
 	err := request.ParseMultipartForm(10 << 20)
 	if err != nil {
@@ -67,6 +72,32 @@ func Upload(writer http.ResponseWriter, request *http.Request) {
 
 	// get the files from the request
 	files := request.MultipartForm.File["files[]"]
+
+	var response DiscordResponse
+	response.Id = "1234567890"
+	response.Type = 0
+	response.Content = "Uploaded files"
+	response.ChannelId = "1234567890"
+	response.Author.Id = "1234567890"
+	response.Author.Username = "DiscordUpload"
+	response.Author.Avatar = nil
+	response.Author.Discriminator = "1234"
+	response.Author.PublicFlags = 0
+	response.Author.Flags = 0
+	response.Author.Bot = true
+	response.Author.GlobalName = nil
+
+	response.Embeds = nil
+	response.Mentions = nil
+	response.MentionRoles = nil
+	response.Pinned = false
+	response.MentionEveryone = false
+	response.Tts = false
+	response.Timestamp = time.Now()
+	response.EditedTimestamp = nil
+	response.Flags = 0
+	response.Components = nil
+	response.WebhookId = "1234567890"
 
 	// loop through the files
 	for _, file := range files {
@@ -91,7 +122,7 @@ func Upload(writer http.ResponseWriter, request *http.Request) {
 		}
 
 		// create a new file in the storage folder
-		newFile, err := os.Create("storage/" + fileFolder.String() + "/" + file.Filename)
+		newFile, err := os.Create("storage/" + fileFolder.String() + "/" + slugify(file.Filename))
 		if err != nil {
 			http.Error(writer, err.Error(), http.StatusInternalServerError)
 			return
@@ -118,55 +149,27 @@ func Upload(writer http.ResponseWriter, request *http.Request) {
 			return
 		}
 
-		filePaths[file.Filename] = "storage/" + fileFolder.String() + "/" + file.Filename
+		var attachment Attachment
+		attachment.Id = fileFolder.String()
+		attachment.Filename = slugify(file.Filename)
+		attachment.Size = int(file.Size)
+		attachment.Url = domain + "storage/" + fileFolder.String() + "/" + slugify(file.Filename)
+		attachment.ProxyUrl = domain + "storage/" + fileFolder.String() + "/" + slugify(file.Filename)
+		attachment.Width = 0
+		attachment.Height = 0
+		attachment.ContentType = file.Header.Get("Content-Type")
+		attachment.Placeholder = domain + "storage/" + fileFolder.String() + "/" + slugify(file.Filename)
+		attachment.PlaceholderVersion = 1
+
+		uploadedFiles = append(uploadedFiles, attachment)
 	}
 
-	var response DiscordResponse
-	response.Id = "1234567890"
-	response.Type = 0
-	response.Content = "Uploaded files"
-	response.ChannelId = "1234567890"
-	response.Author.Id = "1234567890"
-	response.Author.Username = "DiscordUpload"
-	response.Author.Avatar = nil
-	response.Author.Discriminator = "1234"
-	response.Author.PublicFlags = 0
-	response.Author.Flags = 0
-	response.Author.Bot = true
-	response.Author.GlobalName = nil
-
-	for originalName, name := range filePaths {
-		var attachedFile Attachment
-		attachedFile.Id = "1234567890"
-		attachedFile.Filename = originalName
-		attachedFile.Size = 1234567890
-		attachedFile.Url = domain + name
-		attachedFile.ProxyUrl = domain + name
-		attachedFile.Width = 0
-		attachedFile.Height = 0
-		attachedFile.ContentType = "image/png"
-		attachedFile.Placeholder = domain + name
-		attachedFile.PlaceholderVersion = 1
-
-		response.Attachments = append(response.Attachments, attachedFile)
-	}
-
-	response.Embeds = nil
-	response.Mentions = nil
-	response.MentionRoles = nil
-	response.Pinned = false
-	response.MentionEveryone = false
-	response.Tts = false
-	response.Timestamp = time.Now()
-	response.EditedTimestamp = nil
-	response.Flags = 0
-	response.Components = nil
-	response.WebhookId = "1234567890"
+	response.Attachments = uploadedFiles
 
 	writer.Header().Set("Content-Type", "application/json")
 	writer.WriteHeader(http.StatusOK)
 
-	log.Printf("\nUploaded %o files\nDuration: %s", len(filePaths), time.Since(startTime))
+	log.Printf("\nUploaded %o files\nDuration: %s", len(uploadedFiles), time.Since(startTime))
 
 	// send the response
 	err = json.NewEncoder(writer).Encode(response)
