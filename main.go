@@ -5,6 +5,8 @@ import (
 	"DiscordUpload/routes"
 	"log"
 	"net/http"
+	"runtime"
+	"strings"
 )
 
 func main() {
@@ -18,7 +20,14 @@ func main() {
 	http.Handle("/storage/", http.StripPrefix("/storage/", http.FileServer(http.Dir("storage"))))
 	http.HandleFunc("/"+secret, routes.Upload)
 
-	err := http.ListenAndServe(":"+port, nil)
+	var listen string
+	if strings.Contains(runtime.GOOS, "windows") {
+		listen = "0.0.0.0:" + port
+	} else {
+		listen = ":" + port
+	}
+
+	err := http.ListenAndServe(listen, nil)
 	if err != nil {
 		log.Fatal(err)
 		return

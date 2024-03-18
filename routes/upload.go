@@ -52,7 +52,7 @@ type DiscordResponse struct {
 	WebhookId       string        `json:"webhook_id"`
 }
 
-var domain = "http://" + config.ReadEnv("DOMAIN") + ":" + config.ReadEnv("PORT") + "/"
+var domain = "http://" + config.ReadEnv("DOMAIN") + "/"
 
 func Upload(writer http.ResponseWriter, request *http.Request) {
 	startTime := time.Now()
