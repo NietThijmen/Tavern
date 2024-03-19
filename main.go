@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/nietthijmen/tavern/config"
+	"github.com/nietthijmen/tavern/database"
 	"github.com/nietthijmen/tavern/optimisation"
 	"github.com/nietthijmen/tavern/prometheus"
 	"github.com/nietthijmen/tavern/routes"
@@ -18,12 +19,15 @@ func main() {
 	secret := config.ReadEnv("SECRET", "secret")
 	enablePrometheus := config.ReadEnv("ENABLE_PROMETHEUS", "false") == "true"
 
+	log.Println("Connection to database")
+	database.Init()
+
 	log.Println("Starting queue server for optimisation")
 	optimisation.StartQueueThread()
 
 	// start a http server
 	http.Handle("/storage/", http.StripPrefix("/storage/", http.FileServer(http.Dir("storage"))))
-	http.HandleFunc("/"+secret, routes.Upload)
+	http.HandleFunc("/", routes.Upload)
 
 	if enablePrometheus {
 		prometheus.RecordMetrics()

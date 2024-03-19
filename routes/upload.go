@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"github.com/google/uuid"
 	"github.com/nietthijmen/tavern/config"
+	"github.com/nietthijmen/tavern/database"
 	"github.com/nietthijmen/tavern/optimisation"
 	"log"
 	"net/http"
@@ -61,6 +62,14 @@ func slugify(s string) string {
 }
 
 func Upload(writer http.ResponseWriter, request *http.Request) {
+	id := request.URL.Path[1:]
+
+	key := database.GetKey(id)
+	if key == "" {
+		http.Error(writer, "Invalid key", http.StatusUnauthorized)
+		return
+	}
+
 	startTime := time.Now()
 
 	var uploadedFiles []Attachment
