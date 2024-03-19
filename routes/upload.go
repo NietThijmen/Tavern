@@ -161,21 +161,25 @@ func Upload(writer http.ResponseWriter, request *http.Request) {
 			return
 		}
 
+		imagePath := "storage/" + fileFolder.String() + "/" + slugify(file.Filename)
+		imageUrl := domain + imagePath
+
 		var attachment Attachment
 		attachment.Id = fileFolder.String()
 		attachment.Filename = slugify(file.Filename)
 		attachment.Size = int(file.Size)
-		attachment.Url = domain + "storage/" + fileFolder.String() + "/" + slugify(file.Filename)
-		attachment.ProxyUrl = domain + "storage/" + fileFolder.String() + "/" + slugify(file.Filename)
+		attachment.Url = imageUrl
+		attachment.ProxyUrl = imageUrl
 		attachment.Width = 0
 		attachment.Height = 0
 		attachment.ContentType = file.Header.Get("Content-Type")
-		attachment.Placeholder = domain + "storage/" + fileFolder.String() + "/" + slugify(file.Filename)
+		attachment.Placeholder = imageUrl
 		attachment.PlaceholderVersion = 1
 
 		uploadedFiles = append(uploadedFiles, attachment)
 
-		optimisation.AddToQueue("storage/"+fileFolder.String()+"/"+slugify(file.Filename), file.Header.Get("Content-Type"))
+		optimisation.AddToQueue(imagePath, file.Header.Get("Content-Type"))
+		go database.LogImage(imageUrl)
 	}
 
 	response.Attachments = uploadedFiles

@@ -9,6 +9,7 @@ import (
 )
 
 var db *sql.DB
+var vaultID string = config.ReadEnv("VAULT_ID", "1")
 
 // Init connects to the database and sets the global db variable
 func Init() {
