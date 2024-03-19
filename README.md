@@ -22,3 +22,5 @@ This allows you to read your metrics from /metrics on the port you set.
 
 There are a few custom metrics:
 - items_uploaded - The amount of items uploaded to the server.
+- total_size - The total size of all the items uploaded to the server.
+- saved_space - The amount of space saved by using Tavern (compression of images).
