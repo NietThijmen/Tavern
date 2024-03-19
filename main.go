@@ -30,7 +30,7 @@ func main() {
 
 	var listen string
 	if strings.Contains(runtime.GOOS, "windows") {
-		listen = "0.0.0.0:" + port
+		listen = "127.0.0.1:" + port
 	} else {
 		listen = ":" + port
 	}
