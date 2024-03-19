@@ -5,7 +5,7 @@ echo "Building for Windows (64-bit)"
 env GOOS=windows GOARCH=amd64 go build -o bin/windows-64.exe .
 
 echo "Building for Windows (32-bit)"
-env GOOS=windows GOARCH=386 go build -o bin/windows-32
+env GOOS=windows GOARCH=386 go build -o bin/windows-32.exe .
 
 echo "Building for Linux (64-bit)"
 env GOOS=linux GOARCH=amd64 go build -o bin/linux .
