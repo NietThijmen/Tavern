@@ -19,6 +19,14 @@ func Optimise(path string, fileType string) {
 		if !optimised {
 			log.Printf("Failed to optimise PNG: %s", err)
 		}
+	case "image/jpeg":
+		currentWorkers++
+		optimised, err := optimiseJpeg(path, 5)
+		currentWorkers--
+
+		if !optimised {
+			log.Printf("Failed to optimise JPEG: %s", err)
+		}
 	default:
 		log.Printf("Unknown file type: %s", fileType)
 	}

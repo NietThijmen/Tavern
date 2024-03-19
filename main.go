@@ -18,9 +18,8 @@ func main() {
 	secret := config.ReadEnv("SECRET", "secret")
 	enablePrometheus := config.ReadEnv("ENABLE_PROMETHEUS", "false") == "true"
 
+	log.Println("Starting queue server for optimisation")
 	optimisation.StartQueueThread()
-
-	log.Printf("Starting server on host: %s & port %s. Secret path = %s", domain, port, secret)
 
 	// start a http server
 	http.Handle("/storage/", http.StripPrefix("/storage/", http.FileServer(http.Dir("storage"))))
@@ -38,6 +37,7 @@ func main() {
 		listen = ":" + port
 	}
 
+	log.Printf("Starting server on host: %s & port %s. Secret path = %s", domain, port, secret)
 	err := http.ListenAndServe(listen, nil)
 	if err != nil {
 		log.Fatal(err)
