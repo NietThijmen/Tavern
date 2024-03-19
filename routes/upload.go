@@ -53,7 +53,7 @@ type DiscordResponse struct {
 	WebhookId       string        `json:"webhook_id"`
 }
 
-var domain = "http://" + config.ReadEnv("DOMAIN") + "/"
+var domain = "http://" + config.ReadEnv("DOMAIN", "localhost") + "/"
 
 func slugify(s string) string {
 	return strings.ToLower(strings.ReplaceAll(s, " ", "-"))
