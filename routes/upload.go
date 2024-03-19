@@ -1,9 +1,9 @@
 package routes
 
 import (
-	"DiscordUpload/config"
 	"encoding/json"
 	"github.com/google/uuid"
+	"github.com/nietthijmen/tavern/config"
 	"log"
 	"net/http"
 	"os"

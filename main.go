@@ -1,9 +1,9 @@
 package main
 
 import (
-	"DiscordUpload/config"
-	"DiscordUpload/prometheus"
-	"DiscordUpload/routes"
+	"github.com/nietthijmen/tavern/config"
+	"github.com/nietthijmen/tavern/prometheus"
+	"github.com/nietthijmen/tavern/routes"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"log"
 	"net/http"
