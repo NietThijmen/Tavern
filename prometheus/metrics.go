@@ -12,11 +12,9 @@ func RecordMetrics() {
 		for {
 
 			dirs, err := os.ReadDir("storage")
-			if err != nil {
-				continue
+			if err == nil {
+				itemsUploaded.Set(float64(len(dirs)) - 1)
 			}
-
-			itemsUploaded.Set(float64(len(dirs)) - 1)
 
 			time.Sleep(2 * time.Second)
 		}
