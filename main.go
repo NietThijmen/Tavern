@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/nietthijmen/tavern/config"
+	"github.com/nietthijmen/tavern/optimisation"
 	"github.com/nietthijmen/tavern/prometheus"
 	"github.com/nietthijmen/tavern/routes"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
@@ -16,6 +17,8 @@ func main() {
 	port := config.ReadEnv("PORT", "8080")
 	secret := config.ReadEnv("SECRET", "secret")
 	enablePrometheus := config.ReadEnv("ENABLE_PROMETHEUS", "false") == "true"
+
+	optimisation.StartQueueThread()
 
 	log.Printf("Starting server on host: %s & port %s. Secret path = %s", domain, port, secret)
 

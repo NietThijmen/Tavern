@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"github.com/google/uuid"
 	"github.com/nietthijmen/tavern/config"
+	"github.com/nietthijmen/tavern/optimisation"
 	"log"
 	"net/http"
 	"os"
@@ -162,6 +163,8 @@ func Upload(writer http.ResponseWriter, request *http.Request) {
 		attachment.PlaceholderVersion = 1
 
 		uploadedFiles = append(uploadedFiles, attachment)
+
+		optimisation.AddToQueue("storage/"+fileFolder.String()+"/"+slugify(file.Filename), file.Header.Get("Content-Type"))
 	}
 
 	response.Attachments = uploadedFiles
