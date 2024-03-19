@@ -5,9 +5,9 @@ import (
 	"time"
 )
 
-var maxWorkers = 10
+const maxWorkers = 10
 
-var queue = make(map[string]string, 0)
+var queue = make(map[string]string)
 var currentWorkers = 0
 
 func Optimise(path string, fileType string) {
