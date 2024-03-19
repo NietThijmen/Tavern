@@ -8,6 +8,7 @@ import (
 	"time"
 )
 
+// RecordMetrics records metrics for the storage folder
 func RecordMetrics() {
 	go func() {
 		for {

@@ -9,6 +9,7 @@ import (
 	"os"
 )
 
+// optimisePng optimises a png image with the given compression level
 func optimisePng(path string, compressionLevel int) (bool, string) {
 	var err error
 	file, err := os.Open(path)
@@ -24,7 +25,10 @@ func optimisePng(path string, compressionLevel int) (bool, string) {
 		return false, err.Error()
 	}
 
-	file.Close()
+	err = file.Close()
+	if err != nil {
+		return false, err.Error()
+	}
 
 	compressing, _ := compression.New(compressionLevel)
 	compressingImage := compressing.Compress(img)
@@ -40,7 +44,10 @@ func optimisePng(path string, compressionLevel int) (bool, string) {
 	}
 
 	newStat, _ := file.Stat()
-	file.Close()
+	err = file.Close()
+	if err != nil {
+		return false, err.Error()
+	}
 
 	log.Printf("Optimised PNG: %s, from %d to %d", path, oldStat.Size(), newStat.Size())
 

@@ -9,6 +9,7 @@ import (
 var keyCache = make(map[string]string)
 var vaultID string = config.ReadEnv("VAULT_ID", "1")
 
+// GetKey retrieves a key from the database and caches it for 5 minutes (used for uploads to the server)
 func GetKey(key string) string {
 	log.Printf("Getting key: %s", key)
 	log.Printf("Vault ID: %s", vaultID)

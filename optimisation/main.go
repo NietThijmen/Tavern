@@ -10,7 +10,8 @@ const maxWorkers = 10
 var queue = make(map[string]string)
 var currentWorkers = 0
 
-func Optimise(path string, fileType string) {
+// optimise optimises a file based on the file type
+func optimise(path string, fileType string) {
 	switch fileType {
 	case "image/png":
 		currentWorkers++
@@ -32,17 +33,19 @@ func Optimise(path string, fileType string) {
 	}
 }
 
+// AddToQueue adds a file to the queue for optimisation
 func AddToQueue(path string, fileType string) {
 	queue[path] = fileType
 }
 
+// StartQueueThread starts a thread that will optimise files in the queue
 func StartQueueThread() {
 	go func() {
 		for {
 			if len(queue) > 0 && currentWorkers < maxWorkers {
 				for path, fileType := range queue {
 					delete(queue, path)
-					Optimise(path, fileType)
+					optimise(path, fileType)
 					break
 				}
 			} else {

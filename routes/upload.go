@@ -57,10 +57,12 @@ type DiscordResponse struct {
 
 var domain = "http://" + config.ReadEnv("DOMAIN", "localhost") + "/"
 
+// slugify converts a string to a slug
 func slugify(s string) string {
 	return strings.ToLower(strings.ReplaceAll(s, " ", "-"))
 }
 
+// Upload handles the upload of files to the server
 func Upload(writer http.ResponseWriter, request *http.Request) {
 	id := request.URL.Path[1:]
 

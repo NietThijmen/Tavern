@@ -8,6 +8,7 @@ import (
 	"os"
 )
 
+// optimiseJpeg optimises a jpeg image with the given compression level
 func optimiseJpeg(path string, compressionLevel int) (bool, string) {
 	var err error
 	file, err := os.Open(path)
@@ -23,7 +24,10 @@ func optimiseJpeg(path string, compressionLevel int) (bool, string) {
 		return false, err.Error()
 	}
 
-	file.Close()
+	err = file.Close()
+	if err != nil {
+		return false, err.Error()
+	}
 
 	file, err = os.Create(path)
 	if err != nil {
@@ -40,8 +44,10 @@ func optimiseJpeg(path string, compressionLevel int) (bool, string) {
 	}
 
 	newStat, _ := file.Stat()
-	file.Close()
-
+	err = file.Close()
+	if err != nil {
+		return false, err.Error()
+	}
 	log.Printf("Optimised Jpeg: %s, from %d to %d", path, oldStat.Size(), newStat.Size())
 
 	prometheus.SavedSpace.Add(float64(oldStat.Size() - newStat.Size()))

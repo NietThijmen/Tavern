@@ -10,6 +10,7 @@ import (
 
 var db *sql.DB
 
+// Init connects to the database and sets the global db variable
 func Init() {
 	var username = config.ReadEnv("DB_USERNAME", "root")
 	var password = config.ReadEnv("DB_PASSWORD", "root")
