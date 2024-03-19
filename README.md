@@ -1,10 +1,10 @@
 # File tavern.
-A discord websocket alternative for storing your files. Fully customizable and easy to use.
+A discord webhook alternative for storing your files. Fully customizable and easy to use.
 
 
 ## Installation
 1. Grab the latest release from the releases page & grab the executable for your system.
-2. Copy the .env.example from github & put it in the same folder named .env and edit it to your liking.
+2. Copy the .env.example from Github & put it in the same folder named .env and edit it to your liking.
 3. Run the executable and you're good to go!
 
 ## Usage
