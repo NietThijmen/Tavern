@@ -12,10 +12,10 @@ import (
 )
 
 func main() {
-	domain := config.ReadEnv("DOMAIN")
-	port := config.ReadEnv("PORT")
-	secret := config.ReadEnv("SECRET")
-	enablePrometheus := config.ReadEnv("ENABLE_PROMETHEUS") == "true"
+	domain := config.ReadEnv("DOMAIN", "localhost")
+	port := config.ReadEnv("PORT", "8080")
+	secret := config.ReadEnv("SECRET", "secret")
+	enablePrometheus := config.ReadEnv("ENABLE_PROMETHEUS", "false") == "true"
 
 	log.Printf("Starting server on host: %s & port %s. Secret path = %s", domain, port, secret)
 
