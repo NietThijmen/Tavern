@@ -10,6 +10,8 @@ const maxWorkers = 10
 var queue = make(map[string]string)
 var currentWorkers = 0
 
+var locked = false
+
 // optimise optimises a file based on the file type
 func optimise(path string, fileType string) {
 	switch fileType {
@@ -35,7 +37,13 @@ func optimise(path string, fileType string) {
 
 // AddToQueue adds a file to the queue for optimisation
 func AddToQueue(path string, fileType string) {
+	for locked {
+		time.Sleep(10 * time.Millisecond)
+	}
+
+	locked = true
 	queue[path] = fileType
+	locked = false
 }
 
 // StartQueueThread starts a thread that will optimise files in the queue
@@ -46,10 +54,12 @@ func StartQueueThread() {
 				for path, fileType := range queue {
 					delete(queue, path)
 					optimise(path, fileType)
+
+					time.Sleep(100 * time.Millisecond)
 					break
 				}
 			} else {
-				time.Sleep(100 * time.Millisecond)
+				time.Sleep(5 * time.Second)
 			}
 		}
 	}()
