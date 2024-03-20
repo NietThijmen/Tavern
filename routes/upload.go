@@ -66,8 +66,8 @@ func slugify(s string) string {
 func Upload(writer http.ResponseWriter, request *http.Request) {
 	id := request.URL.Path[1:]
 
-	key := database.GetKey(id)
-	if key == false {
+	exists := database.GetKey(id)
+	if !exists {
 		http.Error(writer, "Invalid key", http.StatusUnauthorized)
 		return
 	}
