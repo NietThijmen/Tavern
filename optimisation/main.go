@@ -53,7 +53,7 @@ func StartQueueThread() {
 			if len(queue) > 0 && currentWorkers < maxWorkers {
 				for path, fileType := range queue {
 					delete(queue, path)
-					go optimise(path, fileType)
+					optimise(path, fileType)
 					time.Sleep(100 * time.Millisecond)
 					break
 				}
