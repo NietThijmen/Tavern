@@ -8,6 +8,6 @@ func LogImage(url string) {
 		log.Printf("Error logging image: %s", err)
 		return
 	} else {
-		log.Printf("Logged image: %s", url)
+		log.Printf("\nLogged image: %s", url)
 	}
 }

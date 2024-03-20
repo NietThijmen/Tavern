@@ -49,7 +49,7 @@ func optimisePng(path string, compressionLevel int) (bool, string) {
 		return false, err.Error()
 	}
 
-	log.Printf("Optimised PNG: %s, from %d to %d", path, oldStat.Size(), newStat.Size())
+	log.Printf("\nOptimised PNG: %s\nfrom %d to %d", path, oldStat.Size(), newStat.Size())
 
 	prometheus.SavedSpace.Add(float64(oldStat.Size() - newStat.Size()))
 

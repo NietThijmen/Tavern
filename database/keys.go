@@ -4,11 +4,11 @@ import (
 	"time"
 )
 
-var keyCache = make(map[string]string)
+var keyCache = make(map[string]bool)
 
 // GetKey retrieves a key from the database and caches it for 5 minutes (used for uploads to the server)
-func GetKey(key string) string {
-	if keyCache[key] != "" {
+func GetKey(key string) bool {
+	if keyCache[key] {
 		return keyCache[key]
 	}
 
@@ -18,15 +18,15 @@ func GetKey(key string) string {
 	err := row.Scan(&k)
 
 	if err != nil {
-		return ""
+		return false
 	}
 
-	keyCache[key] = k
+	keyCache[key] = k != ""
 
 	go func() {
 		time.Sleep(5 * time.Minute)
 		delete(keyCache, key)
 	}()
 
-	return k
+	return k != ""
 }

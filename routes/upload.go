@@ -67,7 +67,7 @@ func Upload(writer http.ResponseWriter, request *http.Request) {
 	id := request.URL.Path[1:]
 
 	key := database.GetKey(id)
-	if key == "" {
+	if key == false {
 		http.Error(writer, "Invalid key", http.StatusUnauthorized)
 		return
 	}

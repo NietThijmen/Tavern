@@ -48,7 +48,7 @@ func optimiseJpeg(path string, compressionLevel int) (bool, string) {
 	if err != nil {
 		return false, err.Error()
 	}
-	log.Printf("Optimised Jpeg: %s, from %d to %d", path, oldStat.Size(), newStat.Size())
+	log.Printf("Optimised Jpeg: %s\nfrom %d to %d", path, oldStat.Size(), newStat.Size())
 
 	prometheus.SavedSpace.Add(float64(oldStat.Size() - newStat.Size()))
 
