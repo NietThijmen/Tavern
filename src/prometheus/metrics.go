@@ -12,7 +12,6 @@ import (
 func RecordMetrics() {
 	go func() {
 		for {
-
 			dirs, err := os.ReadDir("storage")
 			if err == nil {
 				itemsUploaded.Set(float64(len(dirs)) - 1)

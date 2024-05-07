@@ -1,11 +1,10 @@
 package main
 
 import (
-	"github.com/nietthijmen/tavern/config"
-	"github.com/nietthijmen/tavern/database"
-	"github.com/nietthijmen/tavern/optimisation"
-	"github.com/nietthijmen/tavern/prometheus"
-	"github.com/nietthijmen/tavern/routes"
+	"github.com/nietthijmen/tavern/src/config"
+	"github.com/nietthijmen/tavern/src/optimisation"
+	"github.com/nietthijmen/tavern/src/prometheus"
+	"github.com/nietthijmen/tavern/src/routes"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"log"
 	"net/http"
@@ -17,9 +16,6 @@ func main() {
 	domain := config.ReadEnv("DOMAIN", "localhost")
 	port := config.ReadEnv("PORT", "8080")
 	enablePrometheus := config.ReadEnv("ENABLE_PROMETHEUS", "false") == "true"
-
-	log.Println("Connection to database")
-	database.Init()
 
 	log.Println("Starting queue server for optimisation")
 	optimisation.StartQueueThread()

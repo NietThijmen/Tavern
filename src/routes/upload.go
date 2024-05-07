@@ -3,9 +3,8 @@ package routes
 import (
 	"encoding/json"
 	"github.com/google/uuid"
-	"github.com/nietthijmen/tavern/config"
-	"github.com/nietthijmen/tavern/database"
-	"github.com/nietthijmen/tavern/optimisation"
+	"github.com/nietthijmen/tavern/src/config"
+	"github.com/nietthijmen/tavern/src/optimisation"
 	"log"
 	"net/http"
 	"os"
@@ -66,8 +65,9 @@ func slugify(s string) string {
 func Upload(writer http.ResponseWriter, request *http.Request) {
 	id := request.URL.Path[1:]
 
-	exists := database.GetKey(id)
-	if !exists {
+	correctKey := config.ReadEnv("KEY", "") == id
+
+	if !correctKey {
 		http.Error(writer, "Invalid key", http.StatusUnauthorized)
 		return
 	}
@@ -179,7 +179,6 @@ func Upload(writer http.ResponseWriter, request *http.Request) {
 		uploadedFiles = append(uploadedFiles, attachment)
 
 		optimisation.AddToQueue(imagePath, file.Header.Get("Content-Type"))
-		go database.LogImage(imageUrl)
 	}
 
 	response.Attachments = uploadedFiles
