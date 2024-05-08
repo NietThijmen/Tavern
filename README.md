@@ -1,6 +1,12 @@
 # File tavern.
 A discord webhook alternative for storing your files. Fully customizable and easy to use.
 
+## Warning:
+this project is still in BETA & needs to be tested.
+It has been tested on macOS on an M2 macbook. 
+
+If you have any issues report the issue in an issue or try to create a PR as I've only been using Golang for 3 months
+
 
 ## Installation
 1. Grab the latest release from the releases page & grab the executable for your system.
