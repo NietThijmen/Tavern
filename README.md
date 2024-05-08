@@ -30,3 +30,6 @@ There are a few custom metrics:
 - items_uploaded - The amount of items uploaded to the server.
 - total_size - The total size of all the items uploaded to the server.
 - saved_space - The amount of space saved by using Tavern (compression of images).
+
+## Supporting the creator
+<a href="https://www.buymeacoffee.com/nietthijmen"><img src="https://img.buymeacoffee.com/button-api/?text=Support me&emoji=❤️&slug=nietthijmen&button_colour=FFDD00&font_colour=000000&font_family=Inter&outline_colour=000000&coffee_colour=ffffff" /></a>
