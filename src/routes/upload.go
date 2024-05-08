@@ -65,7 +65,7 @@ func slugify(s string) string {
 func Upload(writer http.ResponseWriter, request *http.Request) {
 	id := request.URL.Path[1:]
 
-	correctKey := config.ReadEnv("KEY", "") == id
+	correctKey := config.ReadEnv("SECRET_PATH", "") == id
 
 	if !correctKey {
 		http.Error(writer, "Invalid key", http.StatusUnauthorized)
