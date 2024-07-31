@@ -4,19 +4,10 @@ import "github.com/rs/zerolog/log"
 
 func Migrate() {
 	var migrations = []string{
-		`CREATE TABLE IF NOT EXISTS users (
-	id INT AUTO_INCREMENT PRIMARY KEY,
-	email VARCHAR(255) UNIQUE NOT NULL,
-	password VARCHAR(255) NOT NULL,
-	created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-)`,
-
 		`CREATE TABLE IF NOT EXISTS api_keys (
    		id INT AUTO_INCREMENT PRIMARY KEY,
-   		user_id INT NOT NULL,
    		api_key VARCHAR(255) NOT NULL,
-   		created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-   		FOREIGN KEY (user_id) REFERENCES users(id)
+   		created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 )`,
 
 		`CREATE TABLE IF NOT EXISTS storage_buckets (

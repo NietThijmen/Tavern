@@ -37,6 +37,59 @@ func main() {
 					return nil
 				},
 			},
+
+			// Generate API key
+			{
+				Name:     "key:generate",
+				Usage:    "Generate a new API key",
+				Category: "Api key",
+				Action: func(c *cli.Context) error {
+					key, err := database.GenerateApiKey()
+					if err != nil {
+						log.Error().Err(err).Msg("Error generating the API key")
+					} else {
+						log.Info().Msg("Generated API key: " + key.ApiKey)
+					}
+
+					return nil
+				},
+			},
+
+			// Delete API key
+			{
+				Name:     "key:delete",
+				Usage:    "Delete an API key",
+				Category: "Api key",
+				Action: func(c *cli.Context) error {
+					err := database.DeleteApiKey(c.Args().First())
+					if err != nil {
+						log.Error().Err(err).Msg("Error deleting the API key")
+					} else {
+						log.Info().Msg("Deleted API key: " + c.Args().First())
+					}
+
+					return nil
+				},
+			},
+
+			// List API keys
+			{
+				Name:     "key:list",
+				Usage:    "List all API keys",
+				Category: "Api key",
+				Action: func(c *cli.Context) error {
+					keys, err := database.GetApiKeys()
+					if err != nil {
+						log.Error().Err(err).Msg("Error listing the API keys")
+					} else {
+						for _, key := range keys {
+							println(key.ApiKey)
+						}
+					}
+
+					return nil
+				},
+			},
 		},
 	}
 

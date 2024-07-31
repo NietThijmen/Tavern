@@ -1,15 +1,7 @@
 package database
 
-type User struct {
-	Id        int
-	Email     string
-	Password  string
-	CreatedAt string
-}
-
 type ApiKey struct {
 	Id        int
-	User      User // This should be mapped to the User struct, not just the user_id.
 	ApiKey    string
 	CreatedAt string
 }
