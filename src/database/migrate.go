@@ -23,6 +23,7 @@ func Migrate() {
        		id INT AUTO_INCREMENT PRIMARY KEY,
        		name VARCHAR(255) NOT NULL,
        		type VARCHAR(255) NOT NULL,
+       		max_size INT NOT NULL COMMENT 'In bytes',
        		root_path VARCHAR(255) NOT NULL,
        		ip VARCHAR(255) DEFAULT NULL,
        		port INT DEFAULT NULL,
@@ -34,8 +35,8 @@ func Migrate() {
 		`CREATE TABLE IF NOT EXISTS storage_objects (
        		id INT AUTO_INCREMENT PRIMARY KEY,
        		bucket_id INT NOT NULL,
-       		name VARCHAR(255) NOT NULL,
-       		size INT NOT NULL,
+       		slug VARCHAR(255) NOT NULL,
+       		size INT NOT NULL COMMENT 'In bytes',
        		file_type VARCHAR(255) NOT NULL,
        		file_path VARCHAR(255) NOT NULL,
        		uploaded_by varchar(255) NOT NULL COMMENT 'IP address of the uploader',
