@@ -14,7 +14,7 @@ func Migrate() {
        		id INT AUTO_INCREMENT PRIMARY KEY,
        		name VARCHAR(255) NOT NULL,
        		type VARCHAR(255) NOT NULL,
-       		max_size INT NOT NULL COMMENT 'In bytes',
+       		max_size BIGINT NOT NULL COMMENT 'In bytes',
        		root_path VARCHAR(255) NOT NULL,
        		ip VARCHAR(255) DEFAULT NULL,
        		port INT DEFAULT NULL,

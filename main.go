@@ -7,6 +7,7 @@ import (
 	"github.com/nietthijmen/tavern/src/encryption"
 	"github.com/nietthijmen/tavern/src/input"
 	"github.com/nietthijmen/tavern/src/storage"
+	"github.com/nietthijmen/tavern/src/webserver"
 	"github.com/rs/zerolog/log"
 	"github.com/urfave/cli/v2"
 	"os"
@@ -19,6 +20,18 @@ func main() {
 		Name:  "tavern",
 		Usage: "Finally, an open source scalable storage solution",
 		Commands: []*cli.Command{
+			// Daemon start command
+			{
+				Name:     "daemon:start",
+				Usage:    "Start the daemon",
+				Category: "Daemon",
+				Action: func(c *cli.Context) error {
+					log.Info().Msg("Starting the daemon")
+					webserver.CreateServer()
+					return nil
+				},
+			},
+
 			// Database migration command
 			{
 				Name:     "database:migrate",
@@ -179,13 +192,13 @@ func main() {
 						case "Name":
 							toCreate.Name = toCreateField
 						case "MaxSize":
-							asInt, err := strconv.Atoi(toCreateField)
+							asInt64, err := strconv.ParseInt(toCreateField, 10, 64)
 							if err != nil {
 								log.Error().Msg("Invalid " + field)
 								return nil
 							}
 
-							toCreate.MaxSize = asInt
+							toCreate.MaxSize = asInt64
 
 						case "RootPath":
 							toCreate.RootPath = toCreateField

@@ -15,9 +15,11 @@ type RemoteFile struct {
 }
 
 type Driver interface {
+	Started() bool
 	Connect() error
 	Disconnect() error
 	UploadFile(file LocalFile) (RemoteFile, error)
+	StreamFile(path string) (io.ReadCloser, error)
 	DownloadFile(path string, targetPath string) error
 	DeleteFile(path string) error
 	ListFiles(path string) ([]string, error)

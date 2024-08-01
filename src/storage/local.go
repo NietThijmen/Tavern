@@ -18,6 +18,10 @@ func (d *LocalDriver) Disconnect() error {
 	return nil
 }
 
+func (d *LocalDriver) Started() bool {
+	return true
+}
+
 func (d *LocalDriver) UploadFile(file LocalFile) (RemoteFile, error) {
 	uuidForPath := uuid.New()
 	fullPath := d.RootPath + "/" + uuidForPath.String() + "/" + file.Name
@@ -35,7 +39,7 @@ func (d *LocalDriver) UploadFile(file LocalFile) (RemoteFile, error) {
 
 	defer targetFile.Close()
 	for {
-		var buffer = make([]byte, 256)
+		var buffer = make([]byte, 8096)
 		n, err := file.Reader.Read(buffer)
 		if err != nil && err != io.EOF {
 			return RemoteFile{}, err
@@ -53,6 +57,16 @@ func (d *LocalDriver) UploadFile(file LocalFile) (RemoteFile, error) {
 		Size: file.Size,
 		Path: uuidForPath.String() + "/" + file.Name,
 	}, nil
+}
+
+func (d *LocalDriver) StreamFile(path string) (io.ReadCloser, error) {
+	fullPath := d.RootPath + "/" + path
+	file, err := os.Open(fullPath)
+	if err != nil {
+		return nil, err
+	}
+
+	return file, nil
 }
 
 func (d *LocalDriver) DownloadFile(path string, targetPath string) error {

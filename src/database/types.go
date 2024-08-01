@@ -10,7 +10,7 @@ type StorageBucket struct {
 	Id        int
 	Name      string
 	Type      string
-	MaxSize   int
+	MaxSize   int64
 	RootPath  string
 	Ip        string
 	Port      int

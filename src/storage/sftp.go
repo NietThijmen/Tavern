@@ -17,6 +17,7 @@ type SftpDriver struct {
 	Port       int
 	RootPath   string
 	Connection *sftp.Client
+	IsStarted  bool
 }
 
 func (d *SftpDriver) Connect() error {
@@ -41,11 +42,17 @@ func (d *SftpDriver) Connect() error {
 	}
 
 	d.Connection = client
+	d.IsStarted = true
 	return nil
 }
 
 func (d *SftpDriver) Disconnect() error {
+	d.IsStarted = false
 	return d.Connection.Close()
+}
+
+func (d *SftpDriver) Started() bool {
+	return d.IsStarted
 }
 
 func (d *SftpDriver) UploadFile(file LocalFile) (RemoteFile, error) {
@@ -66,7 +73,7 @@ func (d *SftpDriver) UploadFile(file LocalFile) (RemoteFile, error) {
 	defer targetFile.Close()
 
 	for {
-		var buffer = make([]byte, 256)
+		var buffer = make([]byte, 1024)
 		n, err := file.Reader.Read(buffer)
 		if err != nil && err != io.EOF {
 			return RemoteFile{}, err
@@ -84,6 +91,16 @@ func (d *SftpDriver) UploadFile(file LocalFile) (RemoteFile, error) {
 		Size: file.Size,
 		Path: uuidForPath.String() + "/" + file.Name,
 	}, nil
+}
+
+func (d *SftpDriver) StreamFile(path string) (io.ReadCloser, error) {
+	fullPath := d.RootPath + "/" + path
+	file, err := d.Connection.Open(fullPath)
+	if err != nil {
+		return nil, err
+	}
+
+	return file, nil
 }
 
 func (d *SftpDriver) DownloadFile(path string, targetPath string) error {

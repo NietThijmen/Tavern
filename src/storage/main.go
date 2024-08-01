@@ -14,6 +14,8 @@ var (
 		"local": {"Name", "MaxSize", "RootPath"},
 		"sftp":  {"Name", "MaxSize", "RootPath", "Ip", "Port", "Username", "Password"},
 	}
+
+	DriverMap = map[string]Driver{}
 )
 
 func GetDriver(driverType string, config map[string]string) Driver {
@@ -38,4 +40,39 @@ func GetDriverFromBucket(bucket database.StorageBucket) Driver {
 	}
 
 	return GetDriver(bucket.Type, config)
+}
+
+func InitialiseDriverMap() {
+	buckets, err := database.GetAllBuckets()
+	if err != nil {
+		log.Error().Err(err).Msg("Error getting all buckets")
+		return
+	}
+
+	for _, bucket := range buckets {
+		DriverMap[bucket.Name] = GetDriverFromBucket(bucket)
+		err := DriverMap[bucket.Name].Connect()
+		if err != nil {
+			log.Error().Err(err).Msg("Error connecting to driver")
+		}
+	}
+}
+
+func GetInitialisedDriver(bucket database.StorageBucket) Driver {
+	driver := DriverMap[bucket.Name]
+	if driver == nil {
+		driver = GetDriverFromBucket(bucket)
+		err := driver.Connect()
+		if err != nil {
+			log.Error().Err(err).Msg("Error connecting to driver")
+		}
+		DriverMap[bucket.Name] = driver
+	}
+
+	if driver.Started() == false {
+		log.Error().Msg("Driver not started")
+		driver.Connect()
+	}
+
+	return driver
 }
