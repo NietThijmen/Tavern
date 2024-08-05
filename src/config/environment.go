@@ -25,7 +25,13 @@ func ReadEnv(key string, defaultValue string) string {
 	lines := strings.Split(fileContent, "\n")
 	for _, line := range lines {
 		if strings.HasPrefix(line, key) {
-			return line[strings.Index(line, "=")+1:]
+			returnValue := line[strings.Index(line, "=")+1:]
+			// remove line breaks
+			returnValue = strings.ReplaceAll(returnValue, "\n", "")
+			returnValue = strings.ReplaceAll(returnValue, "\r", "")
+			// And quotes
+			returnValue = strings.ReplaceAll(returnValue, "\"", "")
+			return returnValue
 		}
 	}
 

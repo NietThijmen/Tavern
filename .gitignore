@@ -6,3 +6,6 @@ storage/*
 !storage/.gitkeep
 
 tavern
+tavern.*
+
+*.sqlite
