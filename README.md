@@ -5,6 +5,27 @@ Supporting multiple storage options (local & SFTP) and multiple databases (sqlit
 
 Wanna see how to set it up? Read more below!
 
+## How does it work?
+Tavern exposes a HTTP server on port 8080, which is responsible for either retrieving files from the buckets or sending them to the buckets while executing some SQL queries.
+```mermaid
+graph LR
+    A[Uploader] -->|Upload 1000x1000.png| D(Tavern)
+    B[Downloader] -->|Download 1000x1000.png| D(Tavern)
+    C[Uploader] -->|Upload 512x512.png| D(Tavern)
+    D -->|Upload file| E[SFTP]
+    D -->|Upload file| F[Local]
+    D -->|Download file| E[SFTP]
+
+    
+    linkStyle 0 stroke:orange
+    linkStyle 1 stroke:purple
+    linkStyle 2 stroke:orange
+    linkStyle 3 stroke:orange
+    linkStyle 4 stroke:orange
+    linkStyle 5 stroke:purple
+
+```
+
 ## Setting up:
 With these X easy steps you can have a file tavern of your own!
 1. Download the executable from the releases (W.I.P, for now you have to build it yourself)
